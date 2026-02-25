@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import Banner from "../../components/Banner"
 import Productslist from "../../components/ProductsList"
 

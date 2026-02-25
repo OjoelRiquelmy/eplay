@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import Productslist from "../../components/ProductsList"
 
 const promocoes = [

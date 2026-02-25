@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 class Game {
     category: string
     description: string

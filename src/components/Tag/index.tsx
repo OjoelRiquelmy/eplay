@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 
 import { TagContainer } from "./styles"
 

@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
 import styled from "styled-components";
+import { TagProps } from '.'
 import { cores } from "../../styles";
 
-import { TagProps } from '.'
 
 export const TagContainer = styled.div<TagProps>`
     display: inline-block;

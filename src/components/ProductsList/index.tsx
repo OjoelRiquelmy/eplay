@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
-import Product from "../Product"
 
 import { ProductsListContainer, List } from "./styles"
 import Game from "../models/Games"
+import Product from "../Product"
 
 export type ProductsListProps = {
     title: string

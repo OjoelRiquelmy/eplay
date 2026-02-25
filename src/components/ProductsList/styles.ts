@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
 import styled from "styled-components";
+import { ProductsListProps } from ".";
 import { cores } from "../../styles";
 
-import { ProductsListProps } from ".";
 import { CardContainer } from "../Product/styles";
 
 export const ProductsListContainer = styled.section<Omit<ProductsListProps, 'title' | 'games'>>`

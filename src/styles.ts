@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { createGlobalStyle } from 'styled-components'
 export const cores = {
     primary: '#333',

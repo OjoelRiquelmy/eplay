@@ -1,12 +1,11 @@
-/* eslint-disable prettier/prettier */
 import { BrowserRouter }from 'react-router-dom'
 
+import Footer from './components/Footer'
 import Header from './components/Header'
 
+import Rotas from './pages/routes'
 import { GlobalStyles } from './styles'
 
-import Rotas from './pages/routes'
-import Footer from './components/Footer'
 
 function App() {
   return (

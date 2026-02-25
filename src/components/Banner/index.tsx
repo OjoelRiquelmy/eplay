@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
 import { BannerContainer, Titulo, Preco } from './styles'
 
 import bannerImage from '../../assets/images/banner-homem-aranha.png'
-import Tag from '../Tag';
 import Button from '../Button';
+import Tag from '../Tag';
 
 const Banner = () => (
     <BannerContainer style={{ backgroundImage: `url(${bannerImage})` }}>

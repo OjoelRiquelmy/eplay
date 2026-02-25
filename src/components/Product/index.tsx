@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
-
-import Tag from '../Tag'
 
 import { CardContainer, DescricaoCard, TituloCard, Infos, Image } from './styles'
+import Tag from '../Tag'
+
 
 
 type ProductProps = {

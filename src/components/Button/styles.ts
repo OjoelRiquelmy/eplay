@@ -1,6 +1,5 @@
-/* eslint-disable prettier/prettier */
-import Styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import Styled from 'styled-components'
 
 import { cores } from '../../styles'
 
