@@ -1,25 +1,38 @@
+
 import { BannerContainer, Titulo, Preco } from './styles'
 
-import bannerImage from '../../assets/images/banner-homem-aranha.png'
+import { useGetFeatureGameQuery } from '../../services/api'
 import Button from '../Button';
+import { formataPreco } from '../ProductsList';
 import Tag from '../Tag';
 
-const Banner = () => (
-    <BannerContainer style={{ backgroundImage: `url(${bannerImage})` }}>
-        <div className='container'>
-            <Tag size="big">Destaque do dia</Tag>
-            <div>
-                <Titulo>Marvel&apos;s Spirder-Man: Miles Morales PS4 & PS5</Titulo>
-                <Preco>
-                    De <span>R$ 250,00</span><br />
-                    por apenas R$ 99,90
-                </Preco>
+
+const Banner = () => {
+    const { data: game, isLoading } = useGetFeatureGameQuery()
+
+
+
+    if (!game) {
+        return <h3>Caregando...</h3>
+    }
+    
+    return (
+        <BannerContainer style={{ backgroundImage: `url(${game?.media.cover})` }}>
+            <div className='container'>
+                <Tag size="big">Destaque do dia</Tag>
+                <div>
+                    <Titulo>{game.name}</Titulo>
+                    <Preco>
+                        De <span>{formataPreco(game?.prices.old)}</span><br />
+                        por apenas {formataPreco(game?.prices.current)}
+                    </Preco>
+                </div>
+                <Button type="link" title="Comprar agora" to={`/product/${game.id}`}>
+                    Comprar agora
+                </Button>
             </div>
-            <Button type="link" title="Comprar agora" to="/produtos/1">
-                Comprar agora
-            </Button>
-        </div>
-    </BannerContainer>
-)
+        </BannerContainer>
+    )
+}
 
 export default Banner;

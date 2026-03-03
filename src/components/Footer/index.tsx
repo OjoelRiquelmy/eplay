@@ -11,12 +11,10 @@ const Footer = () => (
                 <SectionTitle>Categorias</SectionTitle>
                 <Links>
                     <li><Link href="/categorias/acao">Ação</Link></li>
-                    <li><Link href="/categorias/aventura">Aventura</Link></li>
+                    <li><Link href="/categorias/luta">Aventura</Link></li>
                     <li><Link href="/categorias/rpg">RPG</Link></li>
                     <li><Link href="/categorias/esportes">Esportes</Link></li>
                     <li><Link href="/categorias/simulacao">Simulação</Link></li>
-                    <li><Link href="/categorias/fps">FPS</Link></li>
-                    <li><Link href="/categorias/estrategia">Estratégia</Link></li>
                 </Links>
             </FooterSection>
             <FooterSection>
