@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux'
 import { BrowserRouter }from 'react-router-dom'
 
+import Cart from './components/Cart'
 import Footer from './components/Footer'
 import Header from './components/Header'
 
@@ -20,6 +21,7 @@ function App() {
           </div>
           <Rotas />
           <Footer />
+          <Cart />
       </BrowserRouter>
     </Provider>
     

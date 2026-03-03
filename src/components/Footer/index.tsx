@@ -10,22 +10,20 @@ const Footer = () => (
             <FooterSection>
                 <SectionTitle>Categorias</SectionTitle>
                 <Links>
-                    <li><Link href="/categorias/acao">Ação</Link></li>
-                    <li><Link href="/categorias/luta">Aventura</Link></li>
-                    <li><Link href="/categorias/rpg">RPG</Link></li>
-                    <li><Link href="/categorias/esportes">Esportes</Link></li>
-                    <li><Link href="/categorias/simulacao">Simulação</Link></li>
+                    <li><Link to="/categories#action">Ação</Link></li>
+                    <li><Link to="/categories#fight">Luta</Link></li>
+                    <li><Link to="/categories#rpg">RPG</Link></li>
+                    <li><Link to="/categories#sportes">Esportes</Link></li>
+                    <li><Link to="/categories#simulation">Simulação</Link></li>
                 </Links>
             </FooterSection>
             <FooterSection>
                 <SectionTitle>Acesso rápido</SectionTitle>
                 <Links>
-                    <li><Link href="/">Início</Link></li>
-                    <li><Link href="/categories">Categorias</Link></li>
-                    <li><Link href="/promocoes">Promoções</Link></li>
-                    <li><Link href="/em-breve">Em breve</Link></li>
-                    <li><Link href="/sobre-nos">Sobre nós</Link></li>
-                    <li><Link href="/contato">Contato</Link></li>
+                    <li><Link to="/">Início</Link></li>
+                    <li><Link to="/categories">Categorias</Link></li>
+                    <li><Link to="#on-sale">Promoções</Link></li>
+                    <li><Link to="#coming-soon">Em breve</Link></li>
                 </Links>
             </FooterSection>
             <Copyright>

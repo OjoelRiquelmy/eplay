@@ -18,11 +18,11 @@ const Categories = () => {
         
         return (
             <>
-                <Productslist title="Ação" background="black" games={action} />
-                <Productslist title="RPG" background="gray" games={RPG} />
-                <Productslist title="Esportes" background="black" games={esportes} />
-                <Productslist title="Simulação" background="gray" games={simulacao} />
-                <Productslist title="Luta" background="black" games={luta} />
+                <Productslist id="action" title="Ação" background="black" games={action} />
+                <Productslist id="rpg" title="RPG" background="gray" games={RPG} />
+                <Productslist id="sportes" title="Esportes" background="black" games={esportes} />
+                <Productslist id="simulation" title="Simulação" background="gray" games={simulacao} />
+                <Productslist id="fight" title="Luta" background="black" games={luta} />
             </>
         )
     }
