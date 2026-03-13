@@ -8,13 +8,14 @@ import { useGetGameQuery } from '../../services/api'
 
 const Product = () => {
     const { id } = useParams ()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { data: game } = useGetGameQuery(id!)
 
 
     if (!game) {
         return <h3>Caregando...</h3>
     }
-    
+
     return (
         <>
             <Hero game={game}/>
@@ -28,7 +29,7 @@ const Product = () => {
                     <b>Plataforma:</b> {game.details.system} <br />
                     <b>Desenvolvedor:</b> {game.details.developer} <br />
                     <b>SoftwareEditora:</b> {game.details.publishser} <br />
-                    <b>Interactive EntertainmentIdiomas:</b> O jogo oferece suporte a diversos 
+                    <b>Interactive EntertainmentIdiomas:</b> O jogo oferece suporte a diversos
                     idiomas, incluindo {game.details.languages.join(', ')}
                 </p>
             </Section>

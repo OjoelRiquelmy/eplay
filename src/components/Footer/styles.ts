@@ -6,13 +6,14 @@ export const Container = styled.footer`
     background-color: ${cores.primary};
     padding: 40px 0;
     font-size: 14px;
+    margin-top: 40px;
 
     a {
         color: ${cores.tag};
         margin-left: 4px;
         text-decoration: none;
     }
-` 
+`
 
 export const SectionTitle = styled.h4`
     color: ${cores.text};
