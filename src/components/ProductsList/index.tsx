@@ -1,7 +1,8 @@
 
-import { Container, List, Title } from "./styles"
-import { Game } from "../../pages/Home"
+import * as S from "./styles"
 
+import { parseToBrl } from "../../utils"
+import Loader from "../Loader"
 import Product from "../Product"
 
 export type ProductsListProps = {
@@ -9,17 +10,11 @@ export type ProductsListProps = {
     background: 'gray' | 'black'
     games?: Game[]
     id?: string
+    isLoading: boolean
 }
 
-export const formataPreco = (preco = 0) => {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(preco)
-}
+const Productslist = ({title, background, games, id, isLoading}: ProductsListProps) => {
 
-const Productslist = ({title, background, games, id}: ProductsListProps) => {
-    
     const getGameTags = (game:Game) =>{
         const tags = [];
 
@@ -32,18 +27,23 @@ const Productslist = ({title, background, games, id}: ProductsListProps) => {
         }
 
         if (game.prices.current) {
-            tags.push(formataPreco(game.prices.current))
+            tags.push(parseToBrl(game.prices.current))
         }
 
         return tags
     }
 
+    if (isLoading) {
+      return <Loader />
+    }
+
     return (
-        <Container id={id} background={background}>
+        <S.Container id={id} background={background}>
             <div className="container">
-                    <Title>{title}</Title>
-                <List>
-                    {games?.map((game) => (
+                    <S.Title>{title}</S.Title>
+                <S.List>
+                    {games &&
+                      games.map((game) => (
                         <li key={game.id}>
                             <Product
                                 category={game.details.category}
@@ -51,16 +51,16 @@ const Productslist = ({title, background, games, id}: ProductsListProps) => {
                                 images={game.media.thumbnail}
                                 title={game.name}
                                 system={game.details.system}
-                                infos={getGameTags(game)} 
-                                id={game.id}                            
+                                infos={getGameTags(game)}
+                                id={game.id}
                                 />
                         </li>
-                        
+
                     ))}
-                </List>
+                </S.List>
 
             </div>
-        </Container>
+        </S.Container>
     )
 }
 

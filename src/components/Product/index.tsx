@@ -1,5 +1,5 @@
 
-import { CardContainer, DescricaoCard, TituloCard, Infos, Image } from './styles'
+import * as S from './styles'
 import Tag from '../Tag'
 
 
@@ -15,28 +15,28 @@ type ProductProps = {
 }
 
 const Product = ({title, category, system, description, infos, images, id}: ProductProps) => {
-    const getDescricao = (descricao: string) => {
-        if (descricao.length > 95) {
-            return descricao.slice(0, 92) + '...'
+    const getDescription = (text: string) => {
+        if (text.length > 95) {
+            return text.slice(0, 92) + '...'
         }
-        return descricao
+        return text
     }
-    
+
         return (
-        <CardContainer to={`/product/${id}`}>
-            <Image src={images} alt="Resident Evil 4 Remake" />
-            <Infos>
+        <S.CardContainer title={`Clique aqui para ver mais detalhe do jogo: ${title}`} to={`/product/${id}`}>
+            <S.Image src={images} alt="Resident Evil 4 Remake" />
+            <S.Infos>
                 {infos.map(info => (
                     <Tag key={info}>{info}</Tag>
                 ))}
-            </Infos>
-            <TituloCard>{title}</TituloCard>
+            </S.Infos>
+            <S.TitleCard>{title}</S.TitleCard>
             <Tag>{system}</Tag>
             <Tag>{category}</Tag>
-            <DescricaoCard>
-                {getDescricao(description)}
-            </DescricaoCard>
-        </CardContainer>
+            <S.DescriptionCard>
+                {getDescription(description)}
+            </S.DescriptionCard>
+        </S.CardContainer>
     )
 }
 

@@ -1,18 +1,35 @@
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import InputMask from 'react-input-mask'
+import { useDispatch, useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
+
 import * as Yup from 'yup'
-import { Row, InputGroup, TagButton } from './styles'
-import boleto from '../../assets/images/barcode 1.png'
-import cartao from '../../assets/images/credit-card 1.png'
+import * as S from './styles'
+import barCode from '../../assets/images/barcode 1.png'
+import creditCard from '../../assets/images/credit-card 1.png'
 import Button from '../../components/Button'
 import Card from '../../components/Card'
-import { usePurchaseMutation } from '../../services/api'
 
+import { usePurchaseMutation } from '../../services/api'
+import { RootReducer } from '../../store'
+import { clear } from '../../store/reducers/cart'
+import { getTotalPrice, parseToBrl } from '../../utils/index'
+
+type Installments = {
+  quantity: number
+  amount: number
+  formttedAmount: string
+}
 
 const Checkout = () => {
   const [payWithCard, setPayWithCard] = useState (false)
-  const [purchase, { isLoading, isError, data, isSuccess }] = usePurchaseMutation()
+  const [purchase, { isLoading, data, isSuccess }] = usePurchaseMutation()
+  const { items } = useSelector((state:RootReducer) => state.cart)
+  const [installments, setInstalment] = useState<Installments[]>([])
+  const dispatch = useDispatch()
 
+  const totalPrice = getTotalPrice(items)
 
   const form = useFormik({
     initialValues: {
@@ -50,7 +67,7 @@ const Checkout = () => {
       expiresMonth: Yup.string().when((values, schema) => payWithCard ? schema.required('Este campo é obrigatório') : schema),
       expiresYear: Yup.string().when((values, schema) => payWithCard ? schema.required('Este campo é obrigatório') : schema),
       cardCode: Yup.string().when((values, schema) => payWithCard ? schema.required('Este campo é obrigatório') : schema),
-      installments: Yup.string().when((values, schema) => payWithCard ? schema.required('Este campo é obrigatório') : schema)
+      installments: Yup.number().when((values, schema) => payWithCard ? schema.required('Este campo é obrigatório') : schema)
     }),
     onSubmit: (values) => {
         purchase({
@@ -65,7 +82,7 @@ const Checkout = () => {
 
           },
           payment: {
-            installments: 1,
+            installments: values.installments,
             card: {
               active: payWithCard,
               code: Number(values.cardCode),
@@ -76,32 +93,62 @@ const Checkout = () => {
                 name: values.cardOwner
               },
               expires: {
-                month: 1,
-                year: 2026
+                month: Number(values.expiresMonth),
+                year: Number(values.expiresYear)
               }
             }
           },
-          products: [
-            {
-              id: 1,
-              price: 10
-            }
-          ]
+          products: items.map((item) => ({
+            id: item.id,
+            price: item.prices.current as number
+          }))
         })
     }
   })
 
-  const getErrorMessage = (fieldName: string, message?: string) => {
+  const checkInputHasError = (fieldName: string) => {
     const touched = fieldName in form.touched
     const invalid = fieldName in form.errors
+    const hasError = touched && invalid
 
-    if (touched && invalid) return message
-    return ''
+    return hasError
+  }
+
+
+
+  useEffect(() => {
+    const calculateInstallments = () => {
+    const installmentsArray: Installments[] = []
+    for (let i = 1; i <= 6; i++){
+      installmentsArray.push({
+        quantity: i,
+        amount: totalPrice / i,
+        formttedAmount: parseToBrl(totalPrice / i)
+      })
+    }
+
+    return installmentsArray
+  }
+
+    if (totalPrice > 0){
+      setInstalment(calculateInstallments())
+    }
+
+  }, [totalPrice])
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clear())
+    }
+  },[isSuccess, dispatch])
+
+  if (items.length === 0 && !isSuccess) {
+    return<Navigate to='/'/>
   }
 
   return (
     <div className="container">
-      {isSuccess ? (
+      {isSuccess && data ? (
         <Card title='Muito Obrigado' >
         <>
           <p>
@@ -130,8 +177,8 @@ const Checkout = () => {
       ) : (<form onSubmit={form.handleSubmit} >
           <Card title='Dados de cobrança'>
             <>
-              <Row >
-                <InputGroup>
+              <S.Row >
+                <S.InputGroup>
                   <label htmlFor="fullName">Nome completo</label>
                   <input
                   type="text"
@@ -140,10 +187,11 @@ const Checkout = () => {
                   value={form.values.fullName}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('fullName') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('fullName', form.errors.fullName)}</small>
-                </InputGroup>
-                <InputGroup>
+
+                </S.InputGroup>
+                <S.InputGroup>
                   <label htmlFor="email">E-mail</label>
                   <input
                   id='email'
@@ -152,25 +200,28 @@ const Checkout = () => {
                   value={form.values.email}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('email') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('email', form.errors.fullName)}</small>
-                </InputGroup>
-                <InputGroup>
+
+                </S.InputGroup>
+                <S.InputGroup>
                   <label htmlFor="cpf">CPF</label>
-                  <input
+                  <InputMask
                   id='cpf'
                   type="text"
                   name='cpf'
                   value={form.values.cpf}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('cpf') ? 'error' : ''}
+                  mask="000.000.000-00"
                   />
-                  <small>{getErrorMessage('cpf', form.errors.fullName)}</small>
-                </InputGroup>
-              </Row>
+
+                </S.InputGroup>
+              </S.Row>
               <h3 className='margin-top'>Dados de entrega - conteúdo ddigital</h3>
-              <Row>
-                <InputGroup>
+              <S.Row>
+                <S.InputGroup>
                   <label htmlFor='deliveryEmail'>E-mail</label>
                   <input
                   id='deliveryEmail'
@@ -179,10 +230,11 @@ const Checkout = () => {
                   value={form.values.deliveryEmail}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('deliveryEmail') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('deliveryEmail', form.errors.fullName)}</small>
-                </InputGroup>
-                <InputGroup>
+
+                </S.InputGroup>
+                <S.InputGroup>
                   <label htmlFor='comfirmDeliveryEmail'>Comfirme o E-mail</label>
                   <input
                   id='comfirmDeliveryEmail'
@@ -191,128 +243,161 @@ const Checkout = () => {
                   value={form.values.comfirmDeliveryEmail}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('comfirmDeliveryEmail') ? 'error' : ''}
                   />
-                  <small>{getErrorMessage('comfirmDeliveryEmail', form.errors.fullName)}</small>
-                </InputGroup>
-              </Row>
+
+                </S.InputGroup>
+              </S.Row>
             </>
           </Card>
           <Card title="Pagameto">
             <>
-              <TagButton type='button'  $isActive={!payWithCard} onClick={() => setPayWithCard(false)}>
-                <img src={boleto} alt="boleto" />
+              <S.TagButton type='button'  $isActive={!payWithCard} onClick={() => setPayWithCard(false)}>
+                <img src={barCode} alt="boleto" />
                 Boleto bancário
-              </TagButton>
-              <TagButton type='button'  $isActive={payWithCard} onClick={() => setPayWithCard(true)}>
-                <img src={cartao} alt="cartão de crédito" />
+              </S.TagButton>
+              <S.TagButton type='button'  $isActive={payWithCard} onClick={() => setPayWithCard(true)}>
+                <img src={creditCard} alt="cartão de crédito" />
                 Cartão de crádito
-              </TagButton>
+              </S.TagButton>
               <div className='margin-top'>
                   {payWithCard ? (
-                  <>
-                    <Row $marginTop='24px'>
-                    <InputGroup>
-                      <label htmlFor="cardOwner">
-                        Nome titular do cartão
-                      </label>
-                      <input
-                      id='cardOwner'
-                      type="text"
-                      name='cardOwner'
-                      value={form.values.cardOwner}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('cardOwner', form.errors.fullName)}</small>
-                    </InputGroup>
-                    <InputGroup>
-                      <label htmlFor="cardisplayName">
-                        Nome do cartão
-                      </label>
-                      <input
-                      id='cardDisplayName'
-                      type="text"
-                      name='cardisplayName'
-                      value={form.values.cardisplayName}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('ccardDisplayName', form.errors.fullName)}</small>
-                    </InputGroup>
-                    </Row>
-                    <Row $marginTop='24px'>
-                    <InputGroup>
-                      <label htmlFor="cpfCardOwner">
-                        CPF do titular do cartão
-                      </label>
-                      <input
-                      id='cpfCardaOwner'
-                      type="text"
-                      name='cpfCardOwner'
-                      value={form.values.cpfCardOwner}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('cpfOwner', form.errors.fullName)}</small>
-                    </InputGroup>
-                    <InputGroup>
-                      <label htmlFor="cardNumber">
-                        Número do cartão
-                      </label>
-                      <input
-                      id='cardNumber'
-                      type="text"
-                      name='cardNumber'
-                      value={form.values.cardNumber}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('cardNumber', form.errors.fullName)}</small>
-                    </InputGroup>
-                    <InputGroup $maxWidth='123px'>
-                      <label htmlFor="expiresMonth">
-                        Mês do vencimento
-                      </label>
-                      <input
-                      id='expiresMonth'
-                      type="text"
-                      name='expiresMonth'
-                      value={form.values.expiresMonth}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('expiresMonth', form.errors.fullName)}</small>
-                    </InputGroup>
-                    <InputGroup $maxWidth='123px'>
-                      <label htmlFor="expiresYear">
-                        Ano do vencimento
-                      </label>
-                      <input
-                      id='expiresYear'
-                      type="text"
-                      name='expiresYear'
-                      value={form.values.expiresYear}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('expiresYear', form.errors.fullName)}</small>
-                    </InputGroup>
-                    <InputGroup $maxWidth='48px'>
-                      <label htmlFor="cardCode">
-                        CVV
-                      </label>
-                      <input
-                      id='cardCode'
-                      type="text"
-                      name='cardCode'
-                      value={form.values.cardCode}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      />
-                      <small>{getErrorMessage('cardCode', form.errors.fullName)}</small>
-                    </InputGroup>
-                  </Row>
-                  </>
+                  <><>
+                    <S.Row $marginTop='24px'>
+                      <S.InputGroup>
+                        <label htmlFor="cardOwner">
+                          Nome titular do cartão
+                        </label>
+                        <input
+                          id='cardOwner'
+                          type="text"
+                          name='cardOwner'
+                          value={form.values.cardOwner}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('cardOwner') ? 'error' : ''} />
+
+                      </S.InputGroup>
+                      <S.InputGroup>
+                        <label htmlFor="cardisplayName">
+                          Nome do cartão
+                        </label>
+                        <input
+                          id='cardDisplayName'
+                          type="text"
+                          name='cardisplayName'
+                          value={form.values.cardisplayName}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('cardDisplayName') ? 'error' : ''} />
+
+                      </S.InputGroup>
+                    </S.Row>
+                    <S.Row $marginTop='24px'>
+                      <S.InputGroup>
+                        <label htmlFor="cpfCardOwner">
+                          CPF do titular do cartão
+                        </label>
+                        <InputMask
+                          id='cpfCardaOwner'
+                          type="text"
+                          name='cpfCardOwner'
+                          value={form.values.cpfCardOwner}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('cpfCardOwner') ? 'error' : ''}
+                          mask="000.000.000-00"
+                          />
+
+                      </S.InputGroup>
+                      <S.InputGroup>
+                        <label htmlFor="cardNumber">
+                          Número do cartão
+                        </label>
+                        <InputMask
+                          id='cardNumber'
+                          type="text"
+                          name='cardNumber'
+                          value={form.values.cardNumber}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('cardNumber') ? 'error' : ''}
+                          mask="0000 0000 0000 0000"
+                          />
+
+                      </S.InputGroup>
+                      <S.InputGroup $maxWidth='123px'>
+                        <label htmlFor="expiresMonth">
+                          Mês de expiração
+                        </label>
+                        <InputMask
+                          id='expiresMonth'
+                          type="text"
+                          name='expiresMonth'
+                          value={form.values.expiresMonth}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('expiresMonth') ? 'error' : ''}
+                          mask="00"
+                          />
+
+                      </S.InputGroup>
+                      <S.InputGroup $maxWidth='123px'>
+                        <label htmlFor="expiresYear">
+                          Ano de expiração
+                        </label>
+                        <InputMask
+                          id='expiresYear'
+                          type="text"
+                          name='expiresYear'
+                          value={form.values.expiresYear}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('expiresYear') ? 'error' : ''}
+                          mask="00"
+                          />
+
+                      </S.InputGroup>
+                      <S.InputGroup $maxWidth='48px'>
+                        <label htmlFor="cardCode">
+                          CVV
+                        </label>
+                        <InputMask
+                          id='cardCode'
+                          type="text"
+                          name='cardCode'
+                          value={form.values.cardCode}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('cardCode') ? 'error' : ''}
+                          mask="000"
+                          />
+
+                      </S.InputGroup>
+                    </S.Row>
+                  </><S.Row $marginTop="24px">
+                      <S.InputGroup $maxWidth="150px">
+                        <label htmlFor="installments">Parcelamento</label>
+                        <select
+                          id="installments"
+                          name="installments"
+                          value={form.values.installments}
+                          onChange={form.handleChange}
+                          onBlur={form.handleBlur}
+                          className={checkInputHasError('installments') ? 'error' : ''}
+                        >
+                          {installments.map((installment) => (
+                            <option
+                              value={installment.quantity}
+                              key={installment.quantity}
+                            >
+                              {installment.quantity}x de{' '}
+                              {installment.formttedAmount}
+                            </option>
+                          ))}
+                        </select>
+                      </S.InputGroup>
+                    </S.Row></>
                 ) : (
                   <p>
                     Ao optar por essa forma de pagamento, é importante lembrar que a
@@ -323,19 +408,6 @@ const Checkout = () => {
                 )}
               </div>
 
-
-                <Row $marginTop='24px'>
-                  <InputGroup $maxWidth='150px'>
-                  <label htmlFor="installments">Parcelamento</label>
-                  <select name="installments" id="installments" onChange={form.handleChange}
-                  onBlur={form.handleBlur}>
-                    <option value="">1X de R$ 200,00</option>
-                    <option value="">2X de R$ 200,00</option>
-                    <option value="">3X de R$ 200,00</option>
-                  </select>
-                  <small>{getErrorMessage('installments', form.errors.fullName)}</small>
-                  </InputGroup>
-                </Row>
             </>
           </Card>
 
@@ -347,7 +419,8 @@ const Checkout = () => {
           >
             {isLoading ? 'Finalizando compra...' : 'Finalizar compra'}
           </Button>
-      </form>)}
+      </form>
+    )}
     </div>
 
 

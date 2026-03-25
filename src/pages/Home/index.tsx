@@ -4,50 +4,30 @@ import Productslist from "../../components/ProductsList"
 
 import { useGetOnSaleQuery, useGetSoonQuery  }  from '../../services/api'
 
-export interface GalleryItem {
-    type: 'image' | 'video'
-    url: string
-}
 
-export type Game = {
-    id: number
-    name: string
-    description: string
-    release_date?: string
-    prices: {
-        discount: number
-        old?: number
-        current?: number
-    }
-    details: {
-        category: string
-        system: string
-        developer: string
-        publishser: string
-        languages: string[]
-    }
-    media: {
-        thumbnail: string
-        cover: string
-        gallery: [GalleryItem]
-    }
-}
 
 const Home = () => {
-    const {data: onSale} = useGetOnSaleQuery()
-    const {data: soonGames} = useGetSoonQuery()
+    const {data: onSale, isLoading: isLoadingSale} = useGetOnSaleQuery()
+    const {data: soonGames, isLoading: isLoadingSoon} = useGetSoonQuery()
 
-    if (onSale && soonGames) {
         return (
             <>
                 <Banner />
-                <Productslist id="on-sale" title="Jogos em Destaque" background="gray" games={onSale} />
-                <Productslist id="coming-soon" title="Em breve" background="black" games={soonGames} />
+                <Productslist id="on-sale"
+                title="Jogos em Destaque"
+                background="gray"
+                games={onSale}
+                isLoading={isLoadingSale}
+                />
+                <Productslist id="coming-soon"
+                title="Em breve"
+                background="black"
+                games={soonGames}
+                isLoading={isLoadingSoon}
+                />
             </>
         )
-    }
-    return<h4>carregando</h4>
-        
+
 }
 
 export default Home

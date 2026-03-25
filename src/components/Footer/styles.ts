@@ -1,22 +1,22 @@
 import { HashLink } from 'react-router-hash-link'
 import styled from "styled-components";
-import { cores } from "../../styles";
+import { colors } from "../../styles";
 
 export const Container = styled.footer`
-    background-color: ${cores.primary};
+    background-color: ${colors.primary};
     padding: 40px 0;
     font-size: 14px;
     margin-top: 40px;
 
     a {
-        color: ${cores.tag};
+        color: ${colors.tag};
         margin-left: 4px;
         text-decoration: none;
     }
 `
 
 export const SectionTitle = styled.h4`
-    color: ${cores.text};
+    color: ${colors.text};
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 16px;
@@ -27,7 +27,7 @@ export const Links = styled.ul`
 `
 
 export const Link = styled(HashLink)`
-    color: ${cores.secundary};
+    color: ${colors.secundary};
     text-decoration: none;
     margin-right: 8px;
 `

@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-export const cores = {
+export const colors = {
     primary: '#333',
     secundary: '#a3a3a3',
     tag: '#10ac84',
@@ -22,8 +22,8 @@ export const GlobalStyles = createGlobalStyle`
     list-style: none;
     }
     body {
-        background-color: ${cores.background};
-        color: ${cores.text};
+        background-color: ${colors.background};
+        color: ${colors.text};
         padding-top: 40px;
     }
 

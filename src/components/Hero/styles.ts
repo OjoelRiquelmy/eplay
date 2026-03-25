@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { breakpoints, cores } from "../../styles";
+import { breakpoints, colors } from "../../styles";
 import { TagContainer } from "../Tag/styles";
 
 
@@ -46,7 +46,7 @@ export const BannerHero = styled.div`
 
 export const Infos = styled.div`
     padding: 16px;
-    background-color: ${cores.background};
+    background-color: ${colors.background};
     max-width: 290px;
     font-weight: bold;
     border-radius: 8px;
@@ -54,7 +54,7 @@ export const Infos = styled.div`
     h2 {
         font-size: 32px;
     }
-    
+
     p {
         font-size: 18px;
         margin: 16px 0;

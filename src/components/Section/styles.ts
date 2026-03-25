@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { Props } from ".";
 import { CardContainer } from "../../components/Product/styles";
-import { cores } from "../../styles";
+import { colors } from "../../styles";
 
 
 export const Container = styled.section<Omit<Props, 'title' >>`
     padding: 32px 0;
-    background-color: ${props => props.background === 'black' ? cores.background : cores.primary};
+    background-color: ${props => props.background === 'black' ? colors.background : colors.primary};
     color: ${props => props.background === 'gray' ? '#fff' : '#fff'};
 
     ${CardContainer} {
-        background-color: ${props => props.background === 'black' ? cores.primary : cores.background};
+        background-color: ${props => props.background === 'black' ? colors.primary : colors.background};
     }
 
     p {

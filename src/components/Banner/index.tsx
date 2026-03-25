@@ -1,37 +1,40 @@
 
-import { BannerContainer, Titulo, Preco } from './styles'
+import * as S from './styles'
 
 import { useGetFeatureGameQuery } from '../../services/api'
+import { parseToBrl } from '../../utils';
 import Button from '../Button';
-import { formataPreco } from '../ProductsList';
+
+
+import Loader from '../Loader';
 import Tag from '../Tag';
 
 
 const Banner = () => {
-    const { data: game, isLoading } = useGetFeatureGameQuery()
+    const { data: game } = useGetFeatureGameQuery()
 
 
 
     if (!game) {
-        return <h3>Caregando...</h3>
+        return <Loader />
     }
-    
+
     return (
-        <BannerContainer style={{ backgroundImage: `url(${game?.media.cover})` }}>
+        <S.BannerContainer style={{ backgroundImage: `url(${game?.media.cover})` }}>
             <div className='container'>
                 <Tag size="big">Destaque do dia</Tag>
                 <div>
-                    <Titulo>{game.name}</Titulo>
-                    <Preco>
-                        De <span>{formataPreco(game?.prices.old)}</span><br />
-                        por apenas {formataPreco(game?.prices.current)}
-                    </Preco>
+                    <S.Title>{game.name}</S.Title>
+                    <S.Title>
+                        De <span>{parseToBrl(game?.prices.old)}</span><br />
+                        por apenas {parseToBrl(game?.prices.current)}
+                    </S.Title>
                 </div>
                 <Button type="link" title="Comprar agora" to={`/product/${game.id}`}>
                     Comprar agora
                 </Button>
             </div>
-        </BannerContainer>
+        </S.BannerContainer>
     )
 }
 

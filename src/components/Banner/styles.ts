@@ -35,12 +35,12 @@ export const BannerContainer = styled.div`
     }
 `
 
-export const Titulo = styled.h2`
+export const Title = styled.h2`
     font-size: 28px;
     max-width: 440px;
 `
 
-export const Preco = styled.p`
+export const Prices = styled.p`
     font-size: 24px;
     margin-top: 24px;
 

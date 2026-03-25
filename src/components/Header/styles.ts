@@ -1,85 +1,89 @@
-import styled from "styled-components";
-import { breakpoints, cores } from "../../styles";
+import styled from 'styled-components'
+import { breakpoints, colors } from '../../styles'
 
 export const Links = styled.ul`
-    display: flex;
-    margin-left: 40px;
+  display: flex;
+  margin-left: 40px;
 
-    @media (max-width: ${breakpoints.tablet}) {
-      margin-left: 0;
-      display: block;
-    }
-`;
+  @media (max-width: ${breakpoints.tablet}) {
+    margin-left: 0;
+    display: block;
+  }
+`
 
 export const HeaderBar = styled.header`
-    background-color: ${cores.primary};
-    padding: 24px;
-    border-radius: 16px;
-    margin-bottom: 80px;
+  background-color: ${colors.primary};
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 80px;
 
+  a,
+  span {
+    color: ${colors.text};
+    text-decoration: none;
+    font-weight: bold;
+  }
 
-    a {
-        color: ${cores.text};
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-`;
+  h1 {
+    line-height: 0;
+  }
+`
 
 export const HeaderRow = styled.div`
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > div {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
 
-    >div {
-        display: flex;
-        align-items: center;
+    @media (max-width: ${breakpoints.tablet}) {
+      flex: 1;
+      justify-content: space-between;
 
-        @media (max-width: ${breakpoints.tablet}) {
-          flex: 1;
-          justify-content: space-between;
-
-          ${Links}{
-            display: none;
-          }
-        }
+      ${Links} {
+        display: none;
+      }
     }
+  }
 `
 
 export const NavMobile = styled.nav`
   display: none;
 
-  &.is-open{
+  &.is-open {
     display: block;
   }
 `
 
 export const LinkItem = styled.li`
-    margin-right: 16px;
+  margin-right: 16px;
 
-    @media (max-width: ${breakpoints.tablet}) {
+  @media (max-width: ${breakpoints.tablet}) {
     margin-right: 0;
 
     a {
-      text-align: center;
-      display: block;
       padding: 16px 0;
+      display: block;
+      text-align: center;
     }
   }
-
 `
-export const CartButton = styled.a`
-    display: flex;
 
-    img {
-        margin-left: 16px;
-    }
+export const CartButton = styled.span`
+  display: flex;
+  cursor: pointer;
 
-    @media (max-width: ${breakpoints.tablet}) {
-        span{
-          display: none;
-      }
+  img {
+    margin-left: 16px;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    span {
+      display: none;
     }
+  }
 `
 
 export const Hamburguer = styled.div`
@@ -89,7 +93,7 @@ export const Hamburguer = styled.div`
     height: 2px;
     display: block;
     width: 100%;
-    background-color: ${cores.text};
+    background-color: ${colors.text};
     margin-bottom: 4px;
   }
 

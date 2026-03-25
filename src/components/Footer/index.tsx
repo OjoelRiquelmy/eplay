@@ -1,37 +1,37 @@
 
-import { Container, Copyright, FooterSection, Link, Links, SectionTitle } from "./styles"
+import * as S from "./styles"
 
 const currentYear = new Date().getFullYear()
 
 
 const Footer = () => (
-    <Container>
+    <S.Container>
         <div className="container">
-            <FooterSection>
-                <SectionTitle>Categorias</SectionTitle>
-                <Links>
-                    <li><Link to="/categories#action">Ação</Link></li>
-                    <li><Link to="/categories#fight">Luta</Link></li>
-                    <li><Link to="/categories#rpg">RPG</Link></li>
-                    <li><Link to="/categories#sportes">Esportes</Link></li>
-                    <li><Link to="/categories#simulation">Simulação</Link></li>
-                </Links>
-            </FooterSection>
-            <FooterSection>
-                <SectionTitle>Acesso rápido</SectionTitle>
-                <Links>
-                    <li><Link to="/">Início</Link></li>
-                    <li><Link to="/categories">Categorias</Link></li>
-                    <li><Link to="#on-sale">Promoções</Link></li>
-                    <li><Link to="#coming-soon">Em breve</Link></li>
-                </Links>
-            </FooterSection>
-            <Copyright>
-                {currentYear} - &copy; Todos os direitos reservados - Desenvolvido por 
+            <S.FooterSection>
+                <S.SectionTitle>Categorias</S.SectionTitle>
+                <S.Links>
+                    <li><S.Link title="Clique aqui para acessar jogos de Ação" to="/categories#action">Ação</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar jogos de Luta" to="/categories#fight">Luta</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar jogos de RPG" to="/categories#rpg">RPG</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar jogos de Esportes" to="/categories#sportes">Esportes</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar jogos de Simulação" to="/categories#simulation">Simulação</S.Link></li>
+                </S.Links>
+            </S.FooterSection>
+            <S.FooterSection>
+                <S.SectionTitle>Acesso rápido</S.SectionTitle>
+                <S.Links>
+                    <li><S.Link title="Clique aqui para acessar a seção de Início" to="/">Início</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar a seção de Categorias" to="/categories"></S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar a seção de Promoções" to="#on-sale">Promoções</S.Link></li>
+                    <li><S.Link title="Clique aqui para acessar a seção de Em breve" to="#coming-soon">Em breve</S.Link></li>
+                </S.Links>
+            </S.FooterSection>
+            <S.Copyright>
+                {currentYear} - &copy; Todos os direitos reservados - Desenvolvido por
                 <a href="https://site-social-six.vercel.app/">Joel Riquelmy</a>
-            </Copyright>
+            </S.Copyright>
         </div>
-    </Container>
+    </S.Container>
 )
 
 export default Footer
